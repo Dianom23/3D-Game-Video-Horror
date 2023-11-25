@@ -5,18 +5,31 @@ using UnityEngine;
 public class Shooting : MonoBehaviour
 {
     [SerializeField] private float _distance = 100;
-    // Start is called before the first frame update
+    [SerializeField] private Animator _pistolAnimator;
+    [SerializeField] private ParticleSystem _muzzleFlash;
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private float _delayShot = 1f;
+
+    private float _timer;
+
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        _timer += Time.deltaTime;
+
+        if (Input.GetMouseButtonDown(0) && _timer >= _delayShot)
         {
+            _timer = 0;
+
             Ray ray = new Ray(transform.position, transform.forward);
+            _pistolAnimator.SetTrigger("Shot");
+            _muzzleFlash.Play();
+            _audioSource.Play();
 
             if (Physics.Raycast(ray, out RaycastHit hitInfo, _distance))
             {

@@ -5,10 +5,12 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private int _hp = 5;
+    private Animator _animator;
 
     // Start is called before the first frame update
     void Start()
     {
+        _animator = GetComponent<Animator>();
         
     }
 
@@ -23,6 +25,12 @@ public class Enemy : MonoBehaviour
         _hp -= damage;
 
         if (_hp <= 0)
-            Destroy(gameObject);
+            Death();
+            //Destroy(gameObject);
+    }
+
+    private void Death()
+    {
+        _animator.SetTrigger("Death");
     }
 }
