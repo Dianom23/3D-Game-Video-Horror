@@ -5,6 +5,13 @@ using UnityEngine;
 public class Shooting : MonoBehaviour
 {
     [SerializeField] private float _distance = 100;
+    [SerializeField] private LayerMask _shootingLayer;
+    [SerializeField] private Animator _pistolAnimator;
+    [SerializeField] private float _shotDelay = 0.3f;
+    [SerializeField] private ParticleSystem _muzzleFlash;
+    [SerializeField] private AudioSource _audioSource;
+
+    private float _timerShotDelay;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,11 +21,19 @@ public class Shooting : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        _timerShotDelay += Time.deltaTime;
+
+
+        if (Input.GetMouseButtonDown(0) && _timerShotDelay >= _shotDelay)
         {
+            _timerShotDelay = 0;
+            _pistolAnimator.SetTrigger("Shot");
+            _muzzleFlash.Play();
+            _audioSource.Play();
+
             Ray ray = new Ray(transform.position, transform.forward);
 
-            if (Physics.Raycast(ray, out RaycastHit hitInfo, _distance))
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, _distance, _shootingLayer))
             {
                 print(hitInfo.collider.name);
 
