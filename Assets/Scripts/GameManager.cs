@@ -1,18 +1,26 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] private Health _playerHealth;
+    [SerializeField] private PauseMenu _pauseMenu;
+
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        _playerHealth.DeathPlayer.AddListener(OnDeath);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDeath()
     {
-        
+        StartCoroutine(OnDeathCoroutine());
+    }
+
+    private IEnumerator OnDeathCoroutine()
+    {
+        yield return new WaitForSeconds(3);
+        _pauseMenu.SetPause(true);
+        _pauseMenu.enabled = false;
     }
 }

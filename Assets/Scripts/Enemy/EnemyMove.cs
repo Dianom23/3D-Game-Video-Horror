@@ -21,5 +21,10 @@ public class EnemyMove : StateMachineBehaviour
 
         if (distance > 10)
             animator.SetBool("Move", false);
+        else if (distance <= 3)
+        {
+            animator.SetBool("Move", false);
+            animator.SetBool("Attack", true);
+        }
     }
 }
